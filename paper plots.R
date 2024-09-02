@@ -1,14 +1,17 @@
 ## Plots for paper ####
 
-setwd("C:/Users/dattas/OneDrive - NIWA/Projects/2025/OCES2501 Size-based modelling/FishMIP/impacts-of-future-climate/")
-rm(list = ls())
+# Only modification needed - set working directory to where you have pulled the repo to
+
+setwd("C:/Users/dattas/OneDrive - NIWA/Projects/2025/OCES2501 Size-based modelling/FishMIP/impacts-of-future-climate")
+rm(list = ls()) # wipe all variables
 
 # Libraries
 
 library(therMizer) # remotes::install_github("sizespectrum/therMizer") # if needed to install
-library(tidyverse)
-library(readxl)
-library(gridExtra)
+library(tidyverse) # for all sorts of tidyverse commands
+library(readxl) # pulling in Excel files
+library(gridExtra) # plotting plots side-by-side
+
 
 # Load in functions
 

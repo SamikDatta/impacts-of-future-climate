@@ -4,5 +4,5 @@ The data and R code required to produce the figures from the manuscript "The imp
 To run the analysis, simply:
 
 1) Clone the repo.
-2) Open `paper plots.R` and change the working directory on line 3 to wherever your repo is.
+2) Open `paper plots.R` and change the working directory on line 5 to wherever your repo is.
 3) Run `paper plots.R` and everythign should work as required.
