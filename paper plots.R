@@ -1,11 +1,11 @@
 ## Plots for paper ####
 
-setwd("C:/Users/dattas/OneDrive - NIWA/Projects/2025/OCES2501 Size-based modelling/FishMIP")
+setwd("C:/Users/dattas/OneDrive - NIWA/Projects/2025/OCES2501 Size-based modelling/FishMIP/impacts-of-future-climate/")
 rm(list = ls())
 
 # Libraries
 
-library(therMizer) # automatically loads mizer too
+library(therMizer) # remotes::install_github("sizespectrum/therMizer") # if needed to install
 library(tidyverse)
 library(readxl)
 library(gridExtra)
@@ -16,7 +16,7 @@ source('functions for paper.R')
 
 ## Do run if needed ####
 
-do_run = F
+do_run = T
 
 if (do_run == T) {
 
@@ -27,7 +27,7 @@ if (do_run == T) {
   # TBGB
 
   #Read in model
-  tbgb_model = readRDS('tbgb_model_modified.rds')
+  tbgb_model = readRDS('inputs/tbgb_model_modified.rds')
   species_names_tbgb <- as.character(tbgb_model@species_params$species) # getting species names
   sizes_tbgb <- tbgb_model@w # getting w vector
   full_x_tbgb <- log10(tbgb_model@w_full) # 211 long
@@ -36,12 +36,11 @@ if (do_run == T) {
     as_tibble() %>%
     select(species, 'Group name', 'Main species') %>%
     arrange(species)
-  write_csv(temp, file = 'paper/TBGB species.csv')
 
   # CR
 
   #Read in model
-  cr_model <- readParams("../Samik/Chatham Rise/cr_params_final_fit_updated.RDS") # pulling in parameters
+  cr_model <- readParams("inputs/cr_params_final_fit_updated.RDS") # pulling in parameters
   species_names_cr <- as.character(cr_model@species_params$species) # getting species names
   sizes_cr <- cr_model@w # getting w vector
   full_x_cr <- log10(cr_model@w_full) # 211 long
@@ -50,11 +49,10 @@ if (do_run == T) {
     as_tibble() %>%
     select(species, 'Group name', 'Main species') %>%
     arrange(species)
-  write_csv(temp, file = 'paper/CR species.csv')
 
   # Thermal tolerances from Fishbase
 
-  all_thermal_tolerances = readRDS('thermal_tolerances.rds')
+  all_thermal_tolerances = readRDS('inputs/thermal_tolerances.rds')
 
   tbgb_tolerances = all_thermal_tolerances %>%
     filter(area == 'Tasman and Golden Bay') %>%
@@ -76,9 +74,9 @@ if (do_run == T) {
 
   # Ocean temperatures by depth
 
-  all_temps_tbgb = readRDS(file = "outputs/TBGB/all_temperatures.rds") %>%
+  all_temps_tbgb = readRDS(file = "inputs/tbgb_all_temperatures.rds") %>%
     relocate(BOT, .after = 7)
-  all_temps_cr = readRDS(file = "outputs/CR/all_temperatures.rds") %>%
+  all_temps_cr = readRDS(file = "inputs/cr_all_temperatures.rds") %>%
     relocate(BOT, .after = 7)
 
   # Add the species thermal tolerances, space throughout time period
@@ -148,8 +146,9 @@ if (do_run == T) {
   # The vertical migration array we have created is currently filled with 0s
 
   # Use data from Vidette
+
   for (j in 1:nrow(tbgb_model@species_params)) {
-    vert_mixing = read_excel('../Alice/Initial_biomass_distributions_ALL_modified.xlsx',
+    vert_mixing = read_excel('inputs/tbgb_Initial_biomass_distributions.xlsx',
                              sheet = tbgb_model@species_params$species[j],
                              range = "A5:H30") %>%
       select(contains('Layer')) %>%
@@ -171,10 +170,10 @@ if (do_run == T) {
   # vertical_migration_array [, , ] <- 1/dim(vertical_migration_array)[1] # equally mixed
 
   # Use data from Vidette
-  sheets <- excel_sheets('../Samik/Chatham Rise/data/CRAM_Initial_biomass_distributions.xlsx') # list sheet names
+  cr_sheets <- excel_sheets('inputs/cr_Initial_biomass_distributions.xlsx') # list sheet names
 
   for (j in 1:nrow(cr_model@species_params)) {
-    vert_mixing = read_excel('../Samik/Chatham Rise/data/CRAM_Initial_biomass_distributions.xlsx',
+    vert_mixing = read_excel('inputs/cr_Initial_biomass_distributions.xlsx',
                              sheet = which(str_detect(sheets, cr_model@species_params$species[j])), # to find correct sheet
                              range = "A5:H29") %>%
       select(contains('Layer')) %>%
@@ -216,7 +215,7 @@ if (do_run == T) {
   # Load saved ISIMIP spectra
 
   # TBGB
-  out_isimip = read.table(file = "outputs/TBGB/resource_spectra_fitted.dat")
+  out_isimip = read.table(file = "inputs/tbgb_resource_spectra_fitted.dat")
   out_isimip = as(out_isimip, "matrix")
   rownames(out_isimip) <- time_steps
   colnames(out_isimip) <- signif(full_x_tbgb, 3)
@@ -239,7 +238,7 @@ if (do_run == T) {
 
 
   # CR
-  out_isimip = read.table(file = "outputs/CR/resource_spectra_fitted.dat")
+  out_isimip = read.table(file = "inputs/cr_resource_spectra_fitted.dat")
   out_isimip = as(out_isimip, "matrix")
   rownames(out_isimip) <- time_steps
   colnames(out_isimip) <- signif(full_x_cr, 3)
