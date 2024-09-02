@@ -355,7 +355,7 @@ if (do_run == T) {
   g2 = plot_temp_plus_tolerance(all_temps_cr_with_tols, same_species, title = 'CR temperatures and thermal tolerances')
 
   both = grid.arrange(g1, g2, nrow = 2)
-  ggsave(filename = "paper/PNGs/Tolerances unadjusted.png", both, width = 9, height = 9)
+  ggsave(filename = "outputs/Tolerances unadjusted.png", both, width = 9, height = 9)
 
   # after adjustment
 
@@ -369,7 +369,7 @@ if (do_run == T) {
                                 dodge_labels = T)
 
   both = grid.arrange(g3, g4, nrow = 2)
-  ggsave(filename = "paper/PNGs/Tolerances adjusted.png", both, width = 9, height = 9)
+  ggsave(filename = "outputs/Tolerances adjusted.png", both, width = 9, height = 9)
 
   # before and after with mean temperatures
 
@@ -381,7 +381,7 @@ if (do_run == T) {
                                 title = 'CR adjusted thermal tolerances', plot_mean = T)
 
   both = grid.arrange(g1, g2, g3, g4, nrow = 2)
-  ggsave(filename = "paper/PNGs/Both adjusting tolerances.png", both, width = 16, height = 12)
+  ggsave(filename = "outputs/Both adjusting tolerances.png", both, width = 16, height = 12)
 
 
   ## Running simulations
@@ -427,7 +427,7 @@ if (do_run == T) {
     theme_classic()
 
   both = grid.arrange(g1, g2, g3, g4, nrow = 2, layout_matrix= rbind(c(1, 3), c(2, 4)))
-  ggsave(filename = "paper/PNGs/Both steady states.png", both, width = 14, height = 10)
+  ggsave(filename = "outputs/Both steady states.png", both, width = 14, height = 10)
 
 
   ## TherMizer steady state using average of 1961-1970 temperature and resource spectrum
@@ -785,7 +785,7 @@ if (do_run == T) {
 
   # Try and tailor it to monthly timesteps, 1961-2010
 
-  tbgb_historical_effort = as(read.csv("../Alice/data/f_history_with_buffer.csv", row.names = 1), "matrix")
+  tbgb_historical_effort = as(read.csv("inputs/tbgb_f_history.csv", row.names = 1), "matrix")
   gear_names = colnames(tbgb_historical_effort) # record original names
   gear_names_tib = tibble(gear_names) %>%
     mutate(gear_names_mod = case_when(gear_names == 'DEM' ~ 'DPI',
@@ -810,7 +810,7 @@ if (do_run == T) {
 
   # Try and tailor it to monthly timesteps, 1961-2010
 
-  cr_historical_effort = as(read.csv("../Samik/Chatham Rise/data/CR_effort.csv", row.names = 1), "matrix")
+  cr_historical_effort = as(read.csv("inputs/cr_f_history.csv", row.names = 1), "matrix")
   fishing_years = as.numeric(rownames(cr_historical_effort))
   cr_historical_effort = cr_historical_effort[fishing_years > 1960 & fishing_years <= 2010, ]
   cr_historical_effort = cr_historical_effort[c(1, rep(1:nrow(cr_historical_effort), each = 12)), ] # make it monthly, add extra row at top
@@ -921,7 +921,7 @@ g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species %>% filter(run %
                             title_pick = 'Chatham Rise community biomass',
                             max_date = '2011-01-01', smooth_lines = T)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Community biomass historical.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Community biomass historical.png", both, width = 12, height = 6)
 
 g1 = plot_biomass_community(sim_biomass = tbgb_biomass$by_species %>% filter(run %in% c('Baseline', 'With fishing')),
                             title_pick = 'Tasman and Golden Bay community biomass relative to baseline',
@@ -932,7 +932,7 @@ g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species %>% filter(run %
                             max_date = '2011-01-01', proportion = T, smooth_lines = T,
                             min_y = 0.7, max_y = 1.05)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Community biomass historical relative.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Community biomass historical relative.png", both, width = 12, height = 6)
 
 # Future
 
@@ -943,7 +943,7 @@ g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species,
                             title_pick = 'Chatham Rise community biomass',
                             min_date = '2000-01-01', smooth_lines = T)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Community biomass future.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Community biomass future.png", both, width = 12, height = 6)
 
 g1 = plot_biomass_community(sim_biomass = tbgb_biomass$by_species,
                             title_pick = 'Tasman and Golden Bay community biomass relative to baseline',
@@ -954,28 +954,28 @@ g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species,
                             min_date = '2000-01-01', proportion = T, smooth_lines = T,
                             min_y = 0.7, max_y = 1.25)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Community biomass future relative.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Community biomass future relative.png", both, width = 12, height = 6)
 
 ## (2) Species biomass relative to baseline
 
 g1 = plot_biomass_community(sim_biomass = tbgb_biomass$by_species, select_group = 'species', min_date = '2000-01-01',
                             title_pick = 'Tasman and Golden Bay species biomass relative to baseline', proportion = T, smooth_lines = T) +
   scale_x_date(breaks = seq(as.Date("2000-01-01"), as.Date("2060-01-01"), by = "20 years"), date_labels = "%Y")
-ggsave(filename = "paper/PNGs/TBGB species biomass.png", g1, width = 16, height = 12)
+ggsave(filename = "outputs/TBGB species biomass.png", g1, width = 16, height = 12)
 g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species, select_group = 'species', min_date = '2000-01-01',
                             title_pick = 'Chatham Rise species biomass relative to baseline', proportion = T, smooth_lines = T) +
   scale_x_date(breaks = seq(as.Date("2000-01-01"), as.Date("2060-01-01"), by = "20 years"), date_labels = "%Y")
-ggsave(filename = "paper/PNGs/CR species biomass.png", g2, width = 16, height = 14)
+ggsave(filename = "outputs/CR species biomass.png", g2, width = 16, height = 14)
 
 
 ## (3) Weight group biomass relative to baseline
 
 g1 = plot_biomass_community(sim_biomass = tbgb_biomass$by_weight_group, select_group = 'weight_group', min_date = '2006-01-01', title_pick = 'Tasman and Golden Bay weight group biomass relative to baseline', proportion = T, smooth_lines = T)
-ggsave(filename = "paper/PNGs/TBGB weight group biomass.png", g1, width = 12, height = 16)
+ggsave(filename = "outputs/TBGB weight group biomass.png", g1, width = 12, height = 16)
 g2 = plot_biomass_community(sim_biomass = cr_biomass$by_weight_group, select_group = 'weight_group', min_date = '2006-01-01', title_pick = 'Chatham Rise species biomass relative to baseline', proportion = T, smooth_lines = T)
-ggsave(filename = "paper/PNGs/CR weight group biomass.png", g2, width = 12, height = 16)
+ggsave(filename = "outputs/CR weight group biomass.png", g2, width = 12, height = 16)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Both weight group biomass.png", both, width = 16, height = 16)
+ggsave(filename = "outputs/Both weight group biomass.png", both, width = 16, height = 16)
 
 
 ## (4) Biomass range plots by species
@@ -983,7 +983,7 @@ ggsave(filename = "paper/PNGs/Both weight group biomass.png", both, width = 16, 
 g1 = plot_biomass_range(sim_biomass = tbgb_biomass$by_species, min_date = '2056-01-01', title_pick = 'Tasman and Golden Bay species biomass')
 g2 = plot_biomass_range(sim_biomass = cr_biomass$by_species, min_date = '2056-01-01', title_pick = 'Chatham Rise species biomass')
 both = grid.arrange(g1, g2, nrow = 2)
-ggsave(filename = "paper/PNGs/Both species biomass range.png", both, width = 12, height = 10)
+ggsave(filename = "outputs/Both species biomass range.png", both, width = 12, height = 10)
 
 g1 = plot_biomass_range(sim_biomass = tbgb_biomass$by_species, min_date = '2056-01-01',
                         title_pick = 'Tasman and Golden Bay species biomass relative to baseline',
@@ -992,19 +992,19 @@ g2 = plot_biomass_range(sim_biomass = cr_biomass$by_species, min_date = '2056-01
                         title_pick = 'Chatham Rise species biomass relative to baseline',
                         proportion = T)
 both = grid.arrange(g1, g2, nrow = 2)
-ggsave(filename = "paper/PNGs/Both species biomass range relative.png", both, width = 12, height = 10)
+ggsave(filename = "outputs/Both species biomass range relative.png", both, width = 12, height = 10)
 
 ## (6) Biomass range plots by weight group
 
 g1 = plot_biomass_range(sim_biomass = tbgb_biomass$by_weight_group, min_date = '2056-01-01', title_pick = 'Tasman and Golden Bay weight group biomass')
 g2 = plot_biomass_range(sim_biomass = cr_biomass$by_weight_group, min_date = '2056-01-01', title_pick = 'Chatham Rise species biomass')
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Both weight group biomass range.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Both weight group biomass range.png", both, width = 12, height = 6)
 
 g1 = plot_biomass_range(sim_biomass = tbgb_biomass$by_weight_group, min_date = '2056-01-01', title_pick = 'Tasman and Golden Bay weight group biomass', proportion = T, min_y = 0.5, max_y = 6)
 g2 = plot_biomass_range(sim_biomass = cr_biomass$by_weight_group, min_date = '2056-01-01', title_pick = 'Chatham Rise species biomass', proportion = T, min_y = 0.5, max_y = 6)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Both weight group biomass range relative.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Both weight group biomass range relative.png", both, width = 12, height = 6)
 
 
 # (7) Biomass range plots by species asymptotic body size
@@ -1012,23 +1012,23 @@ ggsave(filename = "paper/PNGs/Both weight group biomass range relative.png", bot
 g1 = plot_biomass_range_species_winf(sim_biomass = tbgb_biomass$by_species, min_date = '2056-01-01', title_pick = 'Tasman and Golden Bay species biomass')
 g2 = plot_biomass_range_species_winf(sim_biomass = cr_biomass$by_species, min_date = '2056-01-01', title_pick = 'Chatham Rise species biomass')
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Both asymptotic weight biomass range.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Both asymptotic weight biomass range.png", both, width = 12, height = 6)
 
 g1 = plot_biomass_range_species_winf(sim_biomass = tbgb_biomass$by_species, min_date = '2056-01-01', title_pick = 'Tasman and Golden Bay species biomass relative to baseline', proportion = T)
 g2 = plot_biomass_range_species_winf(sim_biomass = cr_biomass$by_species, min_date = '2056-01-01', title_pick = 'Chatham Rise species biomass relative to baseline', proportion = T)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Both asymptotic weight biomass range relative.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Both asymptotic weight biomass range relative.png", both, width = 12, height = 6)
 
 # (8) # Biomass for same species from both systems
 
 g1 = plot_compare_same_species(sim_biomass = tbgb_biomass$by_species, title_pick = 'Tasman and Golden Bay same species biomass', min_date = '2000-01-01', proportion = T, smooth_lines = T)
-ggsave(filename = "paper/PNGs/TBGB same species biomass relative.png", g1, width = 12, height = 8)
+ggsave(filename = "outputs/TBGB same species biomass relative.png", g1, width = 12, height = 8)
 g2 = plot_compare_same_species(sim_biomass = cr_biomass$by_species, title_pick = 'Chatham Rise same species biomass', min_date = '2000-01-01', proportion = T, smooth_lines = T)
-ggsave(filename = "paper/PNGs/CR same species biomass relative.png", g2, width = 12, height = 8)
+ggsave(filename = "outputs/CR same species biomass relative.png", g2, width = 12, height = 8)
 
 g = plot_compare_same_species2(sim_biomass = bind_rows(tbgb_biomass$by_species, cr_biomass$by_species), title_pick = 'Comparing species present in both ecosystems', min_date = '2000-01-01', proportion = T, smooth_lines = T)
 p = grid.arrange(g[[1]], g[[2]], g[[3]], g[[4]], g[[5]], g[[6]], ncol = 1)
-ggsave(filename = "paper/PNGs/Both same species biomass relative 2.png", p, width = 12, height = 18)
+ggsave(filename = "outputs/Both same species biomass relative 2.png", p, width = 12, height = 18)
 
 # (9) Community yields
 
@@ -1039,7 +1039,7 @@ g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species %>% filter(run %
                             title_pick = 'Chatham Rise community yield',
                             min_date = '2000-01-01', plot_yield = T, smooth_lines = T)
 both = grid.arrange(g1, g2, nrow = 1)
-ggsave(filename = "paper/PNGs/Both community yield.png", both, width = 12, height = 6)
+ggsave(filename = "outputs/Both community yield.png", both, width = 12, height = 6)
 
 # (10) Species yields - confine to highest catches from 2006-10
 
@@ -1072,13 +1072,13 @@ g1 = plot_biomass_community(sim_biomass = tbgb_biomass$by_species %>%
                               filter(species %in% names(tbgb_most_caught)[1:6], !(run %in% c('Baseline', 'With climate change'))),
                             min_date = '2000-01-01', title_pick = 'Tasman and Golden Bay species yield', select_group = 'species',
                             plot_yield = T, smooth_lines = T)
-ggsave(filename = "paper/PNGs/TBGB most caught yield.png", g1, width = 12, height = 6)
+ggsave(filename = "outputs/TBGB most caught yield.png", g1, width = 12, height = 6)
 g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species %>%
                               mutate(species = factor(species, levels = names(cr_most_caught))) %>%
                               filter(species %in% names(cr_most_caught)[1:6], !(run %in% c('Baseline', 'With climate change'))),
                             min_date = '2000-01-01', title_pick = 'Chatham Rise species yield', select_group = 'species',
                             plot_yield = T, smooth_lines = T)
-ggsave(filename = "paper/PNGs/CR most caught yield.png", g2, width = 12, height = 6)
+ggsave(filename = "outputs/CR most caught yield.png", g2, width = 12, height = 6)
 
 # Look at
 
@@ -1168,7 +1168,7 @@ g3 = plot_species_biomass(sim_biomass = cr_biomass$by_species %>% filter(run == 
 g4 = plot_species_biomass(sim_biomass = cr_biomass$by_species %>% filter(run == 'With fishing'), title_pick = 'Chatham Rise (with fishing)', max_date = '2011-01-01')
 
 both = grid.arrange(g1, g3, g2, g4, nrow = 2)
-ggsave(filename = "paper/PNGs/Both therMizer historical.png", both, width = 14, height = 9)
+ggsave(filename = "outputs/Both therMizer historical.png", both, width = 14, height = 9)
 
 
 ## (3) Plots of species biomass through time (projections)
@@ -1188,7 +1188,7 @@ g7 = plot_species_biomass(sim_biomass = cr_biomass$by_species %>% filter(run == 
 g8 = plot_species_biomass(sim_biomass = cr_biomass$by_species %>% filter(run == 'With climate change and fishing'), title_pick = 'Chatham Rise (with climate change and fishing)', min_date = '2000-01-01')
 
 both = grid.arrange(g1, g5, g2, g6, g3, g7, g4, g8, nrow = 4)
-ggsave(filename = "paper/PNGs/Both therMizer projections.png", both, width = 14, height = 18)
+ggsave(filename = "outputs/Both therMizer projections.png", both, width = 14, height = 18)
 
 # (4) Species yields
 
@@ -1196,12 +1196,12 @@ g1 = plot_biomass_community(sim_biomass = tbgb_biomass$by_species %>% filter(run
                             min_date = '2000-01-01', select_group = 'species', plot_yield = T, smooth_lines = T,
                             title_pick = 'Tasman and Golden Bay species yield') +
   scale_x_date(breaks = seq(as.Date("2000-01-01"), as.Date("2060-01-01"), by = "20 years"), date_labels = "%Y")
-ggsave(filename = "paper/PNGs/TBGB species yield.png", g1, width = 16, height = 12)
+ggsave(filename = "outputs/TBGB species yield.png", g1, width = 16, height = 12)
 g2 = plot_biomass_community(sim_biomass = cr_biomass$by_species %>% filter(run %in% c('With fishing', 'With climate change and fishing')),
                             min_date = '2000-01-01', select_group = 'species', plot_yield = T, smooth_lines = T,
                             title_pick = 'Chatham Rise species yield') +
   scale_x_date(breaks = seq(as.Date("2000-01-01"), as.Date("2060-01-01"), by = "20 years"), date_labels = "%Y")
-ggsave(filename = "paper/PNGs/CR species yield.png", g2, width = 16, height = 14)
+ggsave(filename = "outputs/CR species yield.png", g2, width = 16, height = 14)
 
 # (5) Heat map of fishing effort
 
@@ -1222,6 +1222,6 @@ my_breaks = c(-10, -0.1, 1, 10)
 g1 = plot_fishing_effort_heat_map(tbgb_fishing, title_pick = 'Tasman and Golden Bay fishing effort')
 g2 = plot_fishing_effort_heat_map(cr_fishing, title_pick = 'Chatham Rise fishing effort')
 both = grid.arrange(g1, g2, ncol = 1)
-ggsave(filename = "paper/PNGs/Both fishing effort.png", both, width = 9, height = 9)
+ggsave(filename = "outputs/Both fishing effort.png", both, width = 9, height = 9)
 
 
